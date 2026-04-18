@@ -5,27 +5,100 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0b0b0b" />
+
+  <!-- Icons -->
   <link rel="apple-touch-icon" href="https://vignesh-jay.xyz/images/OTT_Icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="icon" href="https://vignesh-jay.xyz/images/OTT_Icon.png">
 
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json">
-
-  <!-- Icon -->
-  <link rel="icon" href="https://vignesh-jay.xyz/images/OTT_Icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Jay Streamr" />
   <meta property="og:image" content="https://vignesh-jay.xyz/images/OTT_Icon.png" />
 
-  <!-- Redirect -->
-  <meta http-equiv="refresh" content="0; url=https://ott.vignesh-jay.xyz" />
+  <style>
+    body {
+      margin: 0;
+      background: #0b0b0b;
+      overflow: hidden;
+    }
+
+    iframe {
+      width: 100vw;
+      height: 100vh;
+      border: none;
+    }
+
+    .hero-buttons {
+      position: absolute;
+      top: 48vh;
+      left: 5%;
+      display: flex;
+      gap: 12px;
+      z-index: 9999;
+    }
+
+    .hero-play {
+      background: #e50914;
+      color: white;
+      border: none;
+      padding: 12px 26px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .hero-info {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: none;
+      padding: 12px 26px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
+  </style>
 </head>
+
+<body>
+
+<!-- Jellyfin -->
+<iframe id="jellyfin" src="https://ott.vignesh-jay.xyz"></iframe>
+
+<!-- Hero Buttons -->
+<div class="hero-buttons">
+  <button class="hero-play">▶ Play</button>
+  <button class="hero-info">ℹ Info</button>
+</div>
+
 <script>
+// Service Worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/service-worker.js');
 }
+
+// Buttons logic
+document.querySelector(".hero-play").onclick = () => {
+  const frame = document.getElementById("jellyfin");
+  const doc = frame.contentWindow.document;
+
+  const first = doc.querySelector(".cardBox");
+  if (first) first.click();
+};
+
+document.querySelector(".hero-info").onclick = () => {
+  const frame = document.getElementById("jellyfin");
+  const doc = frame.contentWindow.document;
+
+  const first = doc.querySelector(".cardBox");
+  if (first) first.click();
+};
 </script>
-<body style="background:#0b0b0b;"></body>
+
+</body>
 </html>
