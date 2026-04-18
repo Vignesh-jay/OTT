@@ -3,15 +3,26 @@
 <head>
   <title>Jay Streamr</title>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0b0b" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Icon -->
+  <link rel="icon" href="https://vignesh-jay.xyz/images/OTT_Icon.png">
+
   <!-- Open Graph -->
   <meta property="og:title" content="Jay Streamr" />
-  <meta property="og:description" content="Your Personal OTT Platform" />
-  <meta property="og:image" content="https://vignesh-jay.xyz/OTT/images/OTT_Logo.png" />
-  <meta property="og:url" content="https://ott.vignesh-jay.xyz" />
-  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://vignesh-jay.xyz/images/OTT_Icon.png" />
 
   <!-- Redirect -->
   <meta http-equiv="refresh" content="0; url=https://ott.vignesh-jay.xyz" />
 </head>
-<body></body>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js');
+}
+</script>
+<body style="background:#0b0b0b;"></body>
 </html>
