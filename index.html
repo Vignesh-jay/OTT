@@ -5,6 +5,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0b0b0b" />
+
   <link rel="apple-touch-icon" href="https://vignesh-jay.xyz/images/OTT_Icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -19,13 +20,139 @@
   <meta property="og:title" content="Jay Streamr" />
   <meta property="og:image" content="https://vignesh-jay.xyz/images/OTT_Icon.png" />
 
-  <!-- Redirect -->
-  <meta http-equiv="refresh" content="0; url=https://ott.vignesh-jay.xyz" />
+  <!-- Preload -->
+  <link rel="preconnect" href="https://ott.vignesh-jay.xyz">
+  <link rel="dns-prefetch" href="https://ott.vignesh-jay.xyz">
+
+  <style>
+    /* ==========================================
+    🎬 CINEMATIC SPLASH
+    ========================================== */
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: radial-gradient(circle at center, #0b0b0b 40%, #000 100%);
+      font-family: sans-serif;
+    }
+
+    .splash {
+      text-align: center;
+      color: white;
+      animation: fadeIn 1s ease, zoomIn 2.8s ease forwards;
+    }
+
+    .logo {
+      width: clamp(140px, 18vw, 260px);
+      margin-bottom: 24px;
+
+      animation:
+        logoFloat 3s ease-in-out infinite,
+        glowPulse 2.5s ease-in-out infinite;
+
+      filter: drop-shadow(0 0 15px rgba(229,9,20,0.4));
+    }
+
+    .text {
+      font-size: clamp(14px, 1.5vw, 20px);
+      opacity: 0.75;
+      margin-top: 10px;
+    }
+
+    /* Progress bar */
+    .progress {
+      width: clamp(180px, 25vw, 320px);
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 22px auto 0;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: #e50914;
+      animation: loadBar 1.8s ease forwards;
+    }
+
+    /* Animations */
+    @keyframes loadBar {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.92); }
+      to { transform: scale(1); }
+    }
+
+    @keyframes logoFloat {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes glowPulse {
+      0% { filter: drop-shadow(0 0 10px rgba(229,9,20,0.3)); }
+      50% { filter: drop-shadow(0 0 30px rgba(229,9,20,0.6)); }
+      100% { filter: drop-shadow(0 0 10px rgba(229,9,20,0.3)); }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    .fade-out {
+      animation: fadeOut 0.4s ease forwards;
+    }
+  </style>
 </head>
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js');
-}
-</script>
-<body style="background:#0b0b0b;"></body>
+
+<body>
+
+  <div class="splash" id="splash">
+    <img class="logo" src="https://vignesh-jay.xyz/images/OTT_Logo.png" />
+    <div class="text">Launching your experience...</div>
+
+    <div class="progress">
+      <div class="bar"></div>
+    </div>
+  </div>
+
+  <script>
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js');
+    }
+
+    // Preload target page (hidden)
+    const preload = document.createElement("iframe");
+    preload.src = "https://ott.vignesh-jay.xyz";
+    preload.style.display = "none";
+    document.body.appendChild(preload);
+
+    // Smooth exit + redirect
+    setTimeout(() => {
+      document.getElementById("splash").classList.add("fade-out");
+
+      setTimeout(() => {
+        window.location.href = "https://ott.vignesh-jay.xyz";
+      }, 350);
+
+    }, 2000);
+  </script>
+
+</body>
 </html>
