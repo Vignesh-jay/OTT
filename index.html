@@ -19,8 +19,8 @@
 
   <!-- Preload -->
 
-  <link rel="preconnect" href="https://ott.vignesh-jay.xyz" crossorigin>
-  <link rel="dns-prefetch" href="https://ott.vignesh-jay.xyz">
+  <link rel="preconnect" href="https://streamr.vignesh-jay.xyz" crossorigin>
+  <link rel="dns-prefetch" href="https://streamr.vignesh-jay.xyz">
 
   <style>
     body {
@@ -120,7 +120,7 @@ if ('serviceWorker' in navigator) {
 // Preload
 const link = document.createElement("link");
 link.rel = "prefetch";
-link.href = "https://ott.vignesh-jay.xyz";
+link.href = "https://streamr.vignesh-jay.xyz";
 document.head.appendChild(link);
 
 let deferredPrompt;
@@ -138,7 +138,7 @@ function goToOTT() {
   document.getElementById("splash").classList.add("fade-out");
 
   setTimeout(() => {
-    window.location.replace("https://ott.vignesh-jay.xyz");
+    window.location.replace("https://streamr.vignesh-jay.xyz");
   }, 350);
 }
 
