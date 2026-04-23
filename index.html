@@ -21,7 +21,7 @@
   <meta property="og:image" content="/images/OTT_Icon.png" />
 
   <!-- Preload -->
-  <link rel="preconnect" href="https://ott.vignesh-jay.xyz">
+  <link rel="preconnect" href="https://ott.vignesh-jay.xyz" crossorigin>
   <link rel="dns-prefetch" href="https://ott.vignesh-jay.xyz">
 
   <style>
@@ -78,7 +78,7 @@
       height: 100%;
       width: 0%;
       background: #e50914;
-      animation: loadBar 1.8s ease forwards;
+      animation: loadBar 2.2s ease forwards;
     }
 
     /* Animations */
@@ -123,13 +123,63 @@
 <body>
 
   <div class="splash" id="splash">
-    <img class="logo" src="https://vignesh-jay.xyz/images/OTT_Logo.png" />
+    <img class="logo" src="/images/OTT_Logo.png" />
     <div class="text">Launching your experience...</div>
 
     <div class="progress">
       <div class="bar"></div>
     </div>
   </div>
+
+<div id="installBanner" style="
+  position: fixed;
+  bottom: -100px;
+  left: 0;
+  width: 100%;
+  background: rgba(20,20,20,0.95);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 9999;
+  border-top: 1px solid #333;
+  transition: bottom 0.4s ease;
+  font-family: sans-serif;
+">
+
+  <div style="display:flex; align-items:center; gap:12px;">
+    <img src="/images/OTT_Icon.png" style="width:36px; height:36px; border-radius:8px;">
+    <div>
+      <div style="font-weight:600;">Jay StreamR</div>
+      <div style="font-size:12px; opacity:0.7;">Install JAY StreamR for better experience</div>
+    </div>
+  </div>
+
+  <div style="display:flex; align-items:center; gap:10px;">
+    <button id="dismissInstall" style="
+      background: transparent;
+      border: none;
+      color: #aaa;
+      font-size: 18px;
+      cursor: pointer;
+    ">✕</button>
+
+    <button id="installBtn" style="
+      background: #e50914;
+      border: none;
+      padding: 8px 14px;
+      color: white;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(229,9,20,0.5);
+    ">
+      Install
+    </button>
+  </div>
+</div>
 
   <script>
     // Register service worker
@@ -138,21 +188,75 @@
     }
 
     // Preload target page (hidden)
-    const preload = document.createElement("iframe");
-    preload.src = "https://ott.vignesh-jay.xyz";
-    preload.style.display = "none";
-    document.body.appendChild(preload);
+    const link = document.createElement("link");
+    link.rel = "prefetch";
+    link.href = "https://ott.vignesh-jay.xyz";
+    document.head.appendChild(link);
 
     // Smooth exit + redirect
-    setTimeout(() => {
+    let redirected = false;
+
+    function goToOTT() {
+      if (redirected) return;
+      redirected = true;
+
       document.getElementById("splash").classList.add("fade-out");
 
       setTimeout(() => {
-        window.location.href = "https://ott.vignesh-jay.xyz";
+        window.location.replace("https://ott.vignesh-jay.xyz");
       }, 350);
+    }
 
-    }, 2000);
+    // Minimum splash time (for branding)
+    setTimeout(goToOTT, 2000);
+
+    // Backup: force redirect if slow network
+    setTimeout(goToOTT, 5000);
+  
+
+  let deferredPrompt;
+  const banner = document.getElementById('installBanner');
+  const installBtn = document.getElementById('installBtn');
+  const dismissBtn = document.getElementById('dismissInstall');
+
+  // Show banner when install available
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    // Delay banner so it doesn’t clash with splash
+    setTimeout(() => {
+      if (!localStorage.getItem("installDismissed")) {
+        banner.style.bottom = "0";
+      }
+    }, 2500);
+  });
+
+  // Install button click
+  installBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === 'accepted') {
+      banner.style.bottom = "-100px";
+    }
+
+    deferredPrompt = null;
+  });
+
+  // Dismiss button
+  dismissBtn.addEventListener('click', () => {
+    banner.style.bottom = "-100px";
+    localStorage.setItem("installDismissed", "true");
+  });
+
+  // Hide after install
+  window.addEventListener('appinstalled', () => {
+    banner.style.bottom = "-100px";
+  });
   </script>
-
 </body>
 </html>
